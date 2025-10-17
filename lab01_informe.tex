@@ -19,7 +19,6 @@
   morestring=[b]',
   morestring=[b]"
 }
-\usepackage[spanish,es-tabla]{babel}
 \usepackage{pdfpages}
 \usepackage{tabularx}
 \usepackage{graphicx}
@@ -85,7 +84,7 @@ Dado que la cantidad de sitios chilenos que utilizan hash es limitada, se permit
 
 \subsection{Identifica el algoritmo de hash utilizado al momento de registrarse en el sitio}
 
-El formulario de registro de LinuxQuestions.org carga la misma librería de vBulletin descrita en \texttt{MD5\_PASSWORD\_FUNCTIONS\_ANALYSIS.md}. Al inspeccionar el envío de \texttt{register.php} con el extractor interactivo se constata que la función global \texttt{md5hash()} calcula el digest MD5 de los campos \texttt{password} y \texttt{passwordconfirm} y deposita los resultados en los campos ocultos \texttt{password\_md5} y \texttt{passwordconfirm\_md5}. La captura muestra que la contraseña de prueba ``dwQzwk9*yW2QnLYPYhB\$KS\$\#ADQ'' produce el hash \texttt{4dfeaea7ce6416c84a46c70e328f7ce2}, valor que coincide con el cálculo local obtenido mediante \texttt{md5sum}. No se evidencian salting ni algoritmos más robustos, por lo que el registro depende exclusivamente de MD5 ejecutado en el cliente.
+El formulario de registro de LinuxQuestions.org carga la misma librería de vBulletin documentada durante el análisis previo de funciones MD5. Al inspeccionar el envío de \texttt{register.php} con el extractor interactivo se constata que la función global \texttt{md5hash()} calcula el digest MD5 de los campos \texttt{password} y \texttt{passwordconfirm} y deposita los resultados en los campos ocultos \texttt{password\_md5} y \texttt{passwordconfirm\_md5}. La captura muestra que la contraseña de prueba ``dwQzwk9*yW2QnLYPYhB\$KS\$\#ADQ'' produce el hash \texttt{4dfeaea7ce6416c84a46c70e328f7ce2}, valor que coincide con el cálculo local obtenido mediante \texttt{md5sum}. No se evidencian salting ni algoritmos más robustos, por lo que el registro depende exclusivamente de MD5 ejecutado en el cliente.
 
 \begin{lstlisting}[language=javascript,basicstyle=\ttfamily\small,keywordstyle=\color{blue},stringstyle=\color{red}]
 var chrsz = 8;
@@ -113,7 +112,7 @@ function md5hash(B, A, E, C) {
 
 \subsection{Identifica el algoritmo de hash utilizado al momento de iniciar sesión}
 
-En la página de inicio de sesión (\texttt{login.php}) se repite la misma lógica: el formulario que envía la acción \texttt{/questions/login.php} incluye los campos \texttt{vb\_login\_md5password} y \texttt{vb\_login\_md5password\_utf}, ambos rellenados por \texttt{md5hash()} justo antes del envío. El archivo \texttt{md5-password-analysis.json} confirma la presencia de las funciones \texttt{hex\_md5()}, \texttt{core\_md5()} y sus auxiliares, demostrando que la contraseña del usuario se convierte en MD5 hexadecimal antes de transmitirse. Durante las pruebas manuales, el valor generado por el navegador para ``dwQzwk9*yW2QnLYPYhB\$KS\$\#ADQ'' coincidió con el digest obtenido en consola, evidenciando la ausencia de sal o mecanismos adicionales.
+En la página de inicio de sesión (\texttt{login.php}) se repite la misma lógica: el formulario que envía la acción \texttt{/questions/login.php} incluye los campos \texttt{vb\_login\_md5password} y \texttt{vb\_login\_md5password\_utf}, ambos rellenados por \texttt{md5hash()} justo antes del envío. El análisis automatizado de los scripts recopilados confirma la presencia de las funciones \texttt{hex\_md5()}, \texttt{core\_md5()} y sus auxiliares, demostrando que la contraseña del usuario se convierte en MD5 hexadecimal antes de transmitirse. Durante las pruebas manuales, el valor generado por el navegador para ``dwQzwk9*yW2QnLYPYhB\$KS\$\#ADQ'' coincidió con el digest obtenido en consola, evidenciando la ausencia de sal o mecanismos adicionales.
 
 \subsection{Genera el hash de la contraseña desde la consola del navegador}
 
@@ -169,7 +168,35 @@ Con la solicitud interceptada se realizó una segunda prueba desde el repeater d
 
 \subsection{Identifica las políticas de privacidad o seguridad}
 
-El sitio enlaza su política en \url{https://www.linuxquestions.org/questions/faq.php?faq=privacy}. Tras pasar el desafío de Cloudflare se revisaron los apartados clave, donde se declara que las contraseñas se almacenan ``en formato cifrado'', que el acceso administrativo queda restringido al personal esencial y que no se comparten las credenciales con terceros. Sin embargo, el documento no detalla el algoritmo ni menciona mecanismos modernos como funciones de derivación con sal, lo que impide validar la robustez del almacenamiento en el servidor.
+El sitio enlaza su política en \url{https://www.linuxquestions.org/questions/faq.php?faq=privacy}. A continuación se transcribe la información detallada de privacidad del sitio:
+
+\subsubsection*{Privacy Policy}
+
+LinuxQuestions.org does not sell members' personal information.
+
+We collect the following personal information: email address, username, password, and IP address. We use this information to operate, maintain, and improve the site.
+
+We will only use this information for the purposes for which we collected or received it.
+
+\subsubsection*{Advertising}
+
+This site displays 3rd party ads. We do not share any information with any 3rd party directly.
+
+\subsubsection*{External Links}
+
+This site contains links to other sites. We are not responsible for the privacy practices or the content of such Web sites.
+
+\subsubsection*{Public Forums}
+
+This site makes chat rooms, forums, message boards, and/or news groups available to its users. Please remember that any information that is disclosed in these areas becomes public information and you should exercise caution when deciding to disclose your personal information.
+
+\subsubsection*{Security}
+
+This site has security measures in place to protect the loss, misuse, and alteration of the information under our control.
+
+\subsubsection*{Third Party Tools}
+
+We may use third party tools to improve the performance and features of our Website. These third party tools are designed to collect only non-personal information about your use of our Website. However, you understand that such tools are created and managed by parties outside our control. As such, we are not responsible for what information is actually captured by such third parties or how such third parties use and protect that information.
 
 \subsection{Comente 4 conclusiones sobre la seguridad del sitio escogido}
 
