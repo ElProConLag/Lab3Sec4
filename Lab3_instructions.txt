@@ -1,0 +1,100 @@
+Informe Laboratorio 3
+Sección x
+Alumno x
+e-mail: alumno.contacto@mail.udp.cl
+Octubre de 2025
+
+Índice
+1. Descripción de actividades
+
+2
+
+2. Desarrollo de actividades según criterio de rúbrica
+2.1. Identifica el algoritmo de hash utilizado al momento de registrarse en el sitio
+2.2. Identifica el algoritmo de hash utilizado al momento de iniciar sesión . . . .
+2.3. Genera el hash de la contraseña desde la consola del navegador . . . . . . . .
+2.4. Intercepta el tráfico login con BurpSuite . . . . . . . . . . . . . . . . . . . .
+2.5. Realiza el intento de login por medio del hash . . . . . . . . . . . . . . . . .
+2.6. Identifica las polı́ticas de privacidad o seguridad . . . . . . . . . . . . . . . .
+2.7. Comente 4 conclusiones sobre la seguridad del sitio escogido . . . . . . . . .
+
+3
+3
+3
+3
+3
+3
+3
+3
+
+1
+
+1 DESCRIPCIÓN DE ACTIVIDADES
+
+1.
+
+Descripción de actividades
+
+Su objetivo será auditar la implementación de algoritmos hash aplicados a contraseñas en
+páginas web desde el lado del cliente, ası́ como evaluar la efectividad de estas medidas contra
+ataques de tipo Pass the Hash (PtH). Para llevar a cabo esta auditorı́a, deberá registrarse
+en un sitio web y crear una cuenta, ingresando una contraseña especı́fica para realizar las
+pruebas.
+Al concluir la tarea, es importante que modifique su contraseña por una diferente para
+garantizar su seguridad.
+Dado que la cantidad de sitios chilenos que utilizan hash es limitada, se permite realizar
+esta tarea en cualquier sitio web a nivel mundial. En este sentido, realice las siguientes
+actividades:
+Identificación del algoritmo de hash utilizado para las contraseñas al momento del
+registro en el sitio.
+Identificación del algoritmo de hash utilizado para las contraseñas al momento de iniciar
+sesión.
+Generación del hash de la contraseña desde la consola del navegador, partiendo de la
+contraseña en texto plano.
+Interceptación del tráfico de login utilizando BurpSuite desde su equipo.
+Realización de un intento de login modificando la contraseña por una incorrecta haciendo uso del hash obtenido en el punto anterior. Puede interceptar el tráfico y modificar
+el hash por el correcto o hacer uso del servicio repeater de BurpSuite.
+Descripción de las polı́ticas de privacidad o seguridad relacionadas con las contraseñas,
+incluyendo un enlace a las mismas.
+Cuatro conclusiones sobre la seguridad o vulnerabilidad de la implementación observada.
+
+2
+
+2 DESARROLLO DE ACTIVIDADES SEGÚN CRITERIO DE RÚBRICA
+
+2.
+
+Desarrollo de actividades según criterio de rúbrica
+
+2.1.
+
+Identifica el algoritmo de hash utilizado al momento de registrarse en el sitio
+
+2.2.
+
+Identifica el algoritmo de hash utilizado al momento de iniciar
+sesión
+
+2.3.
+
+Genera el hash de la contraseña desde la consola del navegador
+
+2.4.
+
+Intercepta el tráfico login con BurpSuite
+
+2.5.
+
+Realiza el intento de login por medio del hash
+
+2.6.
+
+Identifica las polı́ticas de privacidad o seguridad
+
+2.7.
+
+Comente 4 conclusiones sobre la seguridad del sitio escogido
+
+3
+
+

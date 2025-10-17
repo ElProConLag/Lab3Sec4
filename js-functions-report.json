@@ -1,0 +1,17 @@
+{
+  "url": "https://www.linuxquestions.org/questions/login.php",
+  "timestamp": "2025-10-17T00:16:52.741Z",
+  "totalScriptTags": 3,
+  "externalScripts": [
+    {
+      "src": "https://www.linuxquestions.org/cdn-cgi/challenge-platform/h/g/orchestrate/chl_page/v1?ray=98fb9bd54e203580",
+      "type": "text/javascript"
+    },
+    {
+      "src": "https://challenges.cloudflare.com/turnstile/v0/g/e9c9e9d67513/api.js?onload=nleNK4&render=explicit",
+      "type": "text/javascript"
+    }
+  ],
+  "inlineFunctions": [],
+  "inlineFunctionsCount": 0
+}

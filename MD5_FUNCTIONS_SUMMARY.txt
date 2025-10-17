@@ -1,0 +1,218 @@
+================================================================================
+📊 RESUMEN DE FUNCIONES MD5 ENCONTRADAS EN LINUXQUESTIONS.ORG
+================================================================================
+
+🎯 UBICACIÓN: https://www.linuxquestions.org/questions/login.php
+📋 FRAMEWORK: vBulletin
+🔐 TIPO DE AUTENTICACIÓN: MD5 Hash Client-Side
+
+================================================================================
+⭐ FUNCIONES PRINCIPALES
+================================================================================
+
+1. md5hash(B, A, E, C)
+   ├─ Propósito: Cifrar contraseña y rellenar campos ocultos del formulario
+   ├─ Parámetros:
+   │  ├─ B: Input de contraseña (vb_login_password)
+   │  ├─ A: Campo oculto vb_login_md5password
+   │  ├─ E: Campo oculto vb_login_md5password_utf
+   │  └─ C: Flag para limpiar contraseña original
+   ├─ Retorna: true
+   └─ Ubicación: Scripts inline de la página
+
+2. hex_md5(A)
+   ├─ Propósito: Convertir texto a hash MD5 hexadecimal
+   ├─ Parámetro: A (string) - Texto a cifrar
+   ├─ Retorna: String con hash MD5 (hexadecimal)
+   └─ Usado por: md5hash() internamente
+
+3. core_md5(K, F)
+   ├─ Propósito: Algoritmo core del cálculo MD5
+   ├─ Parámetros:
+   │  ├─ K: Array de palabras binarias
+   │  └─ F: Longitud en bits
+   ├─ Retorna: Hash MD5 en formato binario
+   └─ Usa: Funciones auxiliares (md5_ff, md5_gg, md5_hh, md5_ii)
+
+================================================================================
+🔧 FUNCIONES AUXILIARES MD5
+================================================================================
+
+4. b64_md5(A)          - MD5 en Base64
+5. str_md5(A)          - MD5 en formato string binario
+6. md5_cmn(F,C,B,A,E,D) - Función común para rondas
+7. md5_ff(C,B,G,F,A,E,D) - Función de ronda 1 (FF)
+8. md5_gg(C,B,G,F,A,E,D) - Función de ronda 2 (GG)
+9. md5_hh(C,B,G,F,A,E,D) - Función de ronda 3 (HH)
+10. md5_ii(C,B,G,F,A,E,D) - Función de ronda 4 (II)
+
+================================================================================
+🔐 FUNCIONES HMAC-MD5
+================================================================================
+
+11. core_hmac_md5(C, F)  - Algoritmo HMAC-MD5
+12. hex_hmac_md5(A, B)   - HMAC-MD5 hexadecimal
+13. b64_hmac_md5(A, B)   - HMAC-MD5 Base64
+14. str_hmac_md5(A, B)   - HMAC-MD5 string binario
+
+================================================================================
+🎬 INTERFAZ DE USUARIO
+================================================================================
+
+15. highlight_login_box() - Animación del campo de usuario
+
+================================================================================
+📝 CAMPOS DE FORMULARIO RELACIONADOS
+================================================================================
+
+Formulario de Login (form_5):
+├─ vb_login_username [text]
+│  └─ ID: navbar_username
+│     Recibe el nombre de usuario
+│
+├─ vb_login_password [password]
+│  └─ ID: (vacío)
+│     Recibe la contraseña en texto plano
+│
+├─ vb_login_md5password [hidden]
+│  └─ Relleno por md5hash() con hash MD5
+│     Enviado al servidor
+│
+├─ vb_login_md5password_utf [hidden]
+│  └─ Relleno por md5hash() con hash alternativo
+│     Para compatibilidad UTF-8
+│
+├─ do [hidden] = "login"
+├─ s [hidden]
+├─ securitytoken [hidden] = "guest"
+└─ cookieuser [checkbox]
+
+================================================================================
+🔄 FLUJO DE AUTENTICACIÓN
+================================================================================
+
+PASO 1: Usuario ingresa credenciales
+        └─ vb_login_username = "usuario"
+        └─ vb_login_password = "contraseña_plana"
+
+PASO 2: Al enviar formulario, se ejecuta md5hash()
+        ├─ Obtiene valor de vb_login_password
+        ├─ Calcula: hex_md5(str_to_ent(trim(contraseña)))
+        └─ Obtiene hash MD5
+
+PASO 3: Se rellenan campos ocultos
+        ├─ vb_login_md5password = "{hash_md5}"
+        └─ vb_login_md5password_utf = "{hash_alternativo}"
+
+PASO 4: Se limpia el campo de contraseña (opcional)
+        └─ vb_login_password.value = ""
+
+PASO 5: Se envía formulario al servidor
+        ├─ Contenido:
+        │  ├─ vb_login_username: "usuario"
+        │  ├─ vb_login_md5password: "5f4dcc3b5aa765d61d8327deb882cf99"
+        │  └─ vb_login_md5password_utf: (valor similar)
+        │
+        └─ NOTA: La contraseña plana NO se envía al servidor
+
+PASO 6: Servidor verifica el hash
+        ├─ Lee vb_login_md5password
+        ├─ Lo compara con el hash almacenado en BD
+        └─ Otorga o deniega acceso
+
+================================================================================
+🛡️ ANÁLISIS DE SEGURIDAD
+================================================================================
+
+FORTALEZAS:
+  ✅ Hash cliente-side (evita transmisión de contraseña plana)
+  ✅ Limpieza de contraseña en memoria del navegador
+  ✅ Soporte UTF-8 (hash alternativo)
+  ✅ Verificación de navegador Mozilla
+
+DEBILIDADES:
+  ❌ MD5 es criptográficamente débil
+  ❌ Vulnerable a colisiones de hash
+  ❌ Sin salt en cliente (vulnerable a rainbow tables)
+  ⚠️ Requiere HTTPS obligatorio
+  ⚠️ Sin protección CSRF visible
+  ⚠️ Sin rate limiting aparente
+
+RECOMENDACIONES:
+  🔒 Usar HTTPS para todo
+  🔒 Migrar a SHA-256 o superior
+  🔒 Implementar salt en servidor
+  🔒 Agregar rate limiting en servidor
+  🔒 Implementar CSRF tokens
+  🔒 Considerar OAuth2/OpenID Connect
+
+================================================================================
+📊 ESTADÍSTICAS
+================================================================================
+
+Total de funciones MD5 encontradas:        15
+├─ Funciones principales:                  3
+├─ Funciones auxiliares:                   7
+├─ Funciones HMAC:                         4
+└─ Funciones UI:                           1
+
+Campos de formulario involucrados:         9
+├─ Campos visibles:                        4
+├─ Campos ocultos:                         5
+└─ Campos especiales:                      1 (checkbox)
+
+Tamaño aproximado de código:             4-8 KB
+
+Navegadores soportados:                   Mozilla compatible
+Framework detectado:                      vBulletin
+
+================================================================================
+💻 CÓDIGO DE EJEMPLO
+================================================================================
+
+Ejecutar en consola del navegador:
+
+  // 1. Cifrar una contraseña directamente
+  const password = "miContraseña123";
+  const hashed = hex_md5(password);
+  console.log(hashed);
+
+  // 2. Usar md5hash() directamente (simula el login)
+  const pwInput = document.querySelector('input[name="vb_login_password"]');
+  const md5Input = document.querySelector('input[name="vb_login_md5password"]');
+  const md5UtfInput = document.querySelector('input[name="vb_login_md5password_utf"]');
+  
+  pwInput.value = "testpassword";
+  md5hash(pwInput, md5Input, md5UtfInput, false);
+  
+  console.log("Hash:", md5Input.value);
+
+  // 3. Verificar disponibilidad de funciones
+  console.log("hex_md5 disponible:", typeof hex_md5 === 'function');
+  console.log("md5hash disponible:", typeof md5hash === 'function');
+  console.log("core_md5 disponible:", typeof core_md5 === 'function');
+
+================================================================================
+📁 ARCHIVOS GENERADOS
+================================================================================
+
+✓ md5-password-analysis.json
+  └─ Análisis técnico completo en JSON
+
+✓ MD5_PASSWORD_FUNCTIONS_ANALYSIS.md
+  └─ Documentación detallada con ejemplos
+
+✓ MD5_FUNCTIONS_SUMMARY.txt
+  └─ Este resumen visual (este archivo)
+
+================================================================================
+📅 INFORMACIÓN DEL ANÁLISIS
+================================================================================
+
+Fecha:                  2025-10-16
+Sitio analizado:        https://www.linuxquestions.org/questions/login.php
+Método:                 Puppeteer con resolución manual de CAPTCHA
+Herramienta:            find-md5-functions.js
+Estado:                 ✓ Completado exitosamente
+
+================================================================================
