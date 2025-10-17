@@ -19,7 +19,6 @@
   morestring=[b]',
   morestring=[b]"
 }
-\usepackage[spanish,es-tabla]{babel}
 \usepackage{pdfpages}
 \usepackage{tabularx}
 \usepackage{graphicx}
@@ -85,7 +84,7 @@ Dado que la cantidad de sitios chilenos que utilizan hash es limitada, se permit
 
 \subsection{Identifica el algoritmo de hash utilizado al momento de registrarse en el sitio}
 
-El formulario de registro de LinuxQuestions.org carga la misma librería de vBulletin descrita en \texttt{MD5\_PASSWORD\_FUNCTIONS\_ANALYSIS.md}. Al inspeccionar el envío de \texttt{register.php} con el extractor interactivo se constata que la función global \texttt{md5hash()} calcula el digest MD5 de los campos \texttt{password} y \texttt{passwordconfirm} y deposita los resultados en los campos ocultos \texttt{password\_md5} y \texttt{passwordconfirm\_md5}. La captura muestra que la contraseña de prueba ``dwQzwk9*yW2QnLYPYhB\$KS\$\#ADQ'' produce el hash \texttt{4dfeaea7ce6416c84a46c70e328f7ce2}, valor que coincide con el cálculo local obtenido mediante \texttt{md5sum}. No se evidencian salting ni algoritmos más robustos, por lo que el registro depende exclusivamente de MD5 ejecutado en el cliente.
+El formulario de registro de LinuxQuestions.org carga la misma librería de vBulletin documentada durante el análisis previo de funciones MD5. Al inspeccionar el envío de \texttt{register.php} con el extractor interactivo se constata que la función global \texttt{md5hash()} calcula el digest MD5 de los campos \texttt{password} y \texttt{passwordconfirm} y deposita los resultados en los campos ocultos \texttt{password\_md5} y \texttt{passwordconfirm\_md5}. La captura muestra que la contraseña de prueba ``dwQzwk9*yW2QnLYPYhB\$KS\$\#ADQ'' produce el hash \texttt{4dfeaea7ce6416c84a46c70e328f7ce2}, valor que coincide con el cálculo local obtenido mediante \texttt{md5sum}. No se evidencian salting ni algoritmos más robustos, por lo que el registro depende exclusivamente de MD5 ejecutado en el cliente.
 
 \begin{lstlisting}[language=javascript,basicstyle=\ttfamily\small,keywordstyle=\color{blue},stringstyle=\color{red}]
 var chrsz = 8;
@@ -113,7 +112,7 @@ function md5hash(B, A, E, C) {
 
 \subsection{Identifica el algoritmo de hash utilizado al momento de iniciar sesión}
 
-En la página de inicio de sesión (\texttt{login.php}) se repite la misma lógica: el formulario que envía la acción \texttt{/questions/login.php} incluye los campos \texttt{vb\_login\_md5password} y \texttt{vb\_login\_md5password\_utf}, ambos rellenados por \texttt{md5hash()} justo antes del envío. El archivo \texttt{md5-password-analysis.json} confirma la presencia de las funciones \texttt{hex\_md5()}, \texttt{core\_md5()} y sus auxiliares, demostrando que la contraseña del usuario se convierte en MD5 hexadecimal antes de transmitirse. Durante las pruebas manuales, el valor generado por el navegador para ``dwQzwk9*yW2QnLYPYhB\$KS\$\#ADQ'' coincidió con el digest obtenido en consola, evidenciando la ausencia de sal o mecanismos adicionales.
+En la página de inicio de sesión (\texttt{login.php}) se repite la misma lógica: el formulario que envía la acción \texttt{/questions/login.php} incluye los campos \texttt{vb\_login\_md5password} y \texttt{vb\_login\_md5password\_utf}, ambos rellenados por \texttt{md5hash()} justo antes del envío. El análisis automatizado de los scripts recopilados confirma la presencia de las funciones \texttt{hex\_md5()}, \texttt{core\_md5()} y sus auxiliares, demostrando que la contraseña del usuario se convierte en MD5 hexadecimal antes de transmitirse. Durante las pruebas manuales, el valor generado por el navegador para ``dwQzwk9*yW2QnLYPYhB\$KS\$\#ADQ'' coincidió con el digest obtenido en consola, evidenciando la ausencia de sal o mecanismos adicionales.
 
 \subsection{Genera el hash de la contraseña desde la consola del navegador}
 
