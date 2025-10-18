@@ -139,7 +139,7 @@ La consola devolvió \texttt{"4dfeaea7ce6416c84a46c70e328f7ce2"}. Este resultado
 
 \subsection{Intercepta el tráfico login con BurpSuite}
 
-Se configuró BurpSuite en modo proxy y se interceptó la petición POST hacia \url{https://www.linuxquestions.org/questions/login.php}. La traza del panel ``HTTP history'' mostró los parámetros \texttt{vb\_login\_username}, \texttt{vb\_login\_password} (vacío tras la limpieza en cliente) y los hashes \texttt{vb\_login\_md5password} y \texttt{vb\_login\_md5password\_utf}. Ambos últimos coincidieron con el digest MD5 calculado previamente, validando que la contraseña nunca viaja en texto plano cuando el JavaScript se ejecuta correctamente.
+Se configuró BurpSuite en modo proxy y se interceptó la petición POST hacia \url{https://www.linuxquestions.org/questions/login.php}. La traza del panel ``HTTP history'' mostró los parámetros \texttt{vb\_login\_username}, \texttt{vb\_login\_password} (vacío tras la limpieza en cliente) y los hashes \texttt{vb\_login\_md5password} y \texttt{vb\_login\_md5password\_utf}. Ambos últimos coincidieron con el digest MD5 calculado previamente, validando que la contraseña nunca viaja en texto plano cuando el JavaScript se ejecuta correctamente. La figura \ref{fig:burpsuite-intercept} muestra la petición interceptada con los campos MD5 observados.
 
 \begin{figure}[H]
   \centering
@@ -150,7 +150,7 @@ Se configuró BurpSuite en modo proxy y se interceptó la petición POST hacia \
 
 \subsection{Realiza el intento de login por medio del hash}
 
-Con la solicitud interceptada se realizó una segunda prueba desde el repeater de BurpSuite. Se mantuvo el campo \texttt{vb\_login\_password} con una cadena incorrecta y se reemplazó \texttt{vb\_login\_md5password} por el hash correcto previamente capturado. El servidor respondió con un código 302 y cabecera \texttt{Location} apuntando al panel de usuario, lo que evidencia que la autenticación depende exclusivamente del hash transmitido. Esta conducta confirma la viabilidad de un ataque Pass the Hash una vez expuesto el digest MD5.
+Con la solicitud interceptada se realizó una segunda prueba desde el repeater de BurpSuite. Se mantuvo el campo \texttt{vb\_login\_password} con una cadena incorrecta y se reemplazó \texttt{vb\_login\_md5password} por el hash correcto previamente capturado. El servidor respondió con un código 302 y cabecera \texttt{Location} apuntando al panel de usuario, lo que evidencia que la autenticación depende exclusivamente del hash transmitido. Esta conducta confirma la viabilidad de un ataque Pass the Hash una vez expuesto el digest MD5. La figura \ref{fig:burpsuite-request-pass-the-hash} muestra la petición con el hash reutilizado, mientras que la figura \ref{fig:burpsuite-response-pass-the-hash} presenta la respuesta del servidor confirmando el inicio de sesión.
 
 \begin{figure}[H]
   \centering
